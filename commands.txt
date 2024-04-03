@@ -1,0 +1,4 @@
+cython -3 --embed -I/usr/lib/python3/dist-packages -o helloy.c tests/test.py
+clang -S -emit-llvm $(python3-config --cflags | awk '{print $1}') helloy.c -o helloy.ll
+clang++ -shared -o printInst.so printInst.cpp `llvm-config --cxxflags --ldflags --libs` -fPIC
+opt -load ./printInst.so -printInst -enable-new-pm=0 < helloy.ll
